@@ -23,16 +23,19 @@ curl -sfL https://oss-scorecard.dev/install.sh | bash
 `oss-scorecard` 更适合作为一个 **skill-first 产品** 被使用：
 
 - 你不需要先理解整个仓库
-- 你只需要给一个 GitHub repo
-- skill 会把 repo 审计结果组织成 6 域结论 + 改进建议
+- 你可以给一个 GitHub repo，或更好地给一个本地 worktree / 私有仓库路径
+- skill 会优先读真实代码、文档、测试、workflow，再组织成 6 域结论 + 改进建议
 
 当前 skill 背后的现实能力来自：
 
-- `bin/oss-scorecard.mjs audit`
+- `bin/oss-scorecard.mjs audit`（公开 quick baseline）
 - `packages/core/` bootstrap scorer
-- `benchmarks/` + `playbooks/` + `case-studies/`
+- `benchmarks/` + `playbooks/` + `case-studies/` + `research/FINDINGS.md` + `benchmarks/case-anchors.yaml`
 
 ## 当前仓库态的等价运行方式
+
+> 当前最有价值的用法不是只跑 public surface score，而是结合本地代码做深度审计。只要能给本地路径，就优先给本地路径。
+
 
 如果你在仓库开发态，推荐直接：
 
@@ -52,25 +55,31 @@ node ./bin/oss-scorecard.mjs audit openclaw/openclaw
 
 ## 最推荐的提问方式
 
-### 1. 做一次完整 repo 审计
+### 1. 做一次完整 repo 深度审计（推荐）
 
 ```text
-帮我用 oss-scorecard 审计 openclaw/openclaw，按 6 个域给出结果，并告诉我最值得先修的 3 件事。
+帮我用 oss-scorecard 深度审计这个项目，优先读代码、文档、测试和 workflow，判断它的目标用户、当前阶段、内部工程成熟度和对外开源 readiness，然后给出最值得先做的 3 件事。
 ```
 
-### 2. 只看某一个域
+### 2. 审计私有仓库 / 本地 worktree
+
+```text
+帮我用 oss-scorecard 审计这个本地 worktree：/path/to/repo。不要只看表面文件，要从代码、目标、受众、阶段和可用性角度分析。
+```
+
+### 3. 只看某一个域
 
 ```text
 用 oss-scorecard 看一下 openclaw/openclaw 的 docs 和 community 两个域，指出最弱的地方。
 ```
 
-### 3. 做对标
+### 4. 做对标
 
 ```text
 用 oss-scorecard 评估这个 repo，并和 Tier-1 的 openclaw / everything-claude-code 做对比。
 ```
 
-### 4. 从评分跳到改进动作
+### 5. 从评分跳到改进动作
 
 ```text
 先跑 oss-scorecard，然后把低分项映射到对应 playbook，给我一个 7 天改进清单。
@@ -82,22 +91,24 @@ node ./bin/oss-scorecard.mjs audit openclaw/openclaw
 
 接受：
 
+- 本地路径
 - `owner/repo`
 - `owner/repo@branch`
 - 完整 GitHub URL（含 `/tree/<branch>` 也可）
 
-都先转成：
+如果本地路径可用，优先本地路径。
 
-```text
-owner/repo
-```
+### Step 2 — 先判断是 deep 还是 quick
 
-### Step 2 — 先跑可自动化部分
+- **deep**：本地代码 / 私有仓库 / 未发布分支 / 需要真实代码分析
+- **quick**：只有公开 GitHub URL，且只需要快速 baseline
 
-优先使用真实入口：
+### Step 3 — 先读真实项目，再跑自动化补证
+
+公开 quick baseline 仍可用：
 
 ```bash
-node ./bin/oss-scorecard.mjs audit <owner/repo>
+node ./bin/oss-scorecard.mjs audit <owner/repo[@ref]>
 ```
 
 如果需要原始 GitHub 轮廓数据：
@@ -106,7 +117,9 @@ node ./bin/oss-scorecard.mjs audit <owner/repo>
 node --experimental-strip-types packages/collectors/src/cli.ts <owner/repo>
 ```
 
-### Step 3 — 把结果组织成 6 域
+同时应主动读：README、package manifests、workspace 结构、测试、workflow、贡献文档、examples。
+
+### Step 4 — 把结果组织成 6 域
 
 固定按这 6 个域表达：
 
@@ -117,7 +130,7 @@ node --experimental-strip-types packages/collectors/src/cli.ts <owner/repo>
 5. `caselib`
 6. `tooling`
 
-### Step 4 — 把低分项映射成动作
+### Step 5 — 把低分项映射成动作
 
 不要只说“这里不太好”。  
 必须继续映射到：

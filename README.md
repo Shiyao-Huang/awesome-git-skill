@@ -11,6 +11,10 @@ oss-scorecard audit openclaw/openclaw
 ```
 
 ```bash
+oss-scorecard audit /absolute/path/to/private-or-unpublished-repo
+```
+
+```bash
 openclaw/openclaw  (https://github.com/openclaw/openclaw)
 captured_at: 2026-04-27T07:49:31.142Z
 mode: bootstrap-v0  version: 0.1.0-bootstrap
@@ -36,7 +40,7 @@ bash ./install.sh
 `awesome-git-skill` 是这个仓库的**公开仓库名 / 品牌名**，`oss-scorecard` 是当前 CLI 命令名。首屏承诺只有两件事：
 
 1. **一行安装**：`curl -sfL https://oss-scorecard.dev/install.sh | bash`
-2. **零配置审计**：`oss-scorecard audit owner/repo`（也支持 `owner/repo@branch`）
+2. **零配置审计**：`oss-scorecard audit owner/repo`（也支持 `owner/repo@branch` 与本地 worktree 路径）
 
 > 当前本地 `./install.sh` 会在 repo checkout 场景下写入 `~/.local/bin/oss-scorecard` shim；公网 `install.sh` 上线后会对齐到同样的即装即用体验。
 
@@ -92,6 +96,7 @@ Skill-first，CLI/core 作为底层引擎继续演进；Legion + Agents 作为 g
 ```bash
 node ./bin/oss-scorecard.mjs --help
 node ./bin/oss-scorecard.mjs audit openclaw/openclaw --format json
+node ./bin/oss-scorecard.mjs audit /absolute/path/to/private-repo --format json
 node ./bin/oss-scorecard.mjs score openclaw/openclaw > metrics/openclaw.score.json
 node ./bin/oss-scorecard.mjs history
 node ./bin/oss-scorecard.mjs index --root .

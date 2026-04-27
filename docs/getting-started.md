@@ -16,6 +16,12 @@ curl -sfL https://oss-scorecard.dev/install.sh | bash
 oss-scorecard audit openclaw/openclaw
 ```
 
+或直接审计本地私有 worktree：
+
+```bash
+oss-scorecard audit /absolute/path/to/repo
+```
+
 > 这条 builderbio-style 安装链路已经有本地脚本版本：`./install.sh`。在 repo checkout 场景下它会写入 `~/.local/bin/oss-scorecard`，公网域名版只差托管。
 
 ## 当前可用路径
@@ -32,11 +38,12 @@ oss-scorecard audit openclaw/openclaw
 ```bash
 gh auth status
 node ./bin/oss-scorecard.mjs audit openclaw/openclaw
+node ./bin/oss-scorecard.mjs audit /absolute/path/to/repo
 ```
 
 ## 你会得到什么
 
-输入一个 GitHub 仓库（也支持 branch 形态 `owner/repo@branch`）：
+输入一个 GitHub 仓库（也支持 branch 形态 `owner/repo@branch`），或者一个本地 worktree 路径：
 
 ```bash
 node ./bin/oss-scorecard.mjs audit openclaw/openclaw
@@ -89,6 +96,12 @@ node ./bin/oss-scorecard.mjs audit openclaw/openclaw
 node ./bin/oss-scorecard.mjs audit Shiyao-Huang/bach-orchestra@remerge/online-v5-packages
 ```
 
+### 本地私有 worktree
+
+```bash
+node ./bin/oss-scorecard.mjs audit /Users/copizza/Desktop/happyhere/bach-orchestra-remerge
+```
+
 ### 终端输出示例
 
 ```text
@@ -136,6 +149,7 @@ node ./bin/oss-scorecard.mjs audit openclaw/openclaw \
 当前 `audit` 是 **bootstrap-v0**，已经能做的是：
 
 - 读取真实 GitHub repo 快照
+- 读取本地 git worktree（适用于私有仓库 / 未发布分支）
 - 基于 README / topics / homepage / workflows / license / releases / contributors 等信号打 6 域启发式分
 - 输出 top recommendations
 

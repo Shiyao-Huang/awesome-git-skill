@@ -1,4 +1,4 @@
 interface:
   display_name: "OSS Scorecard"
-  short_description: "Audit a GitHub repo across six OSS growth domains and suggest the highest-leverage fixes."
-  default_prompt: "Run an OSS scorecard on this repository. Collect public evidence, map it to the six domains, identify the top gaps, and recommend the highest-leverage fixes grounded in this workspace's benchmarks, playbooks, and case studies."
+  short_description: "Deeply audit a repo from real code, docs, goals, audience, and release stage—then ground fixes in case studies and playbooks."
+  default_prompt: "Deeply evaluate this repository. Prefer local code and docs over surface metadata, infer the project's goal, audience, and stage, distinguish internal engineering maturity from public OSS readiness, and recommend the highest-leverage fixes grounded in this workspace's case studies, benchmarks, anchors, findings, and playbooks. If local code is unavailable, explicitly label the result as a quick public-surface baseline."
