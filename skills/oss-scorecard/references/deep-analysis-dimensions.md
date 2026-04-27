@@ -13,7 +13,7 @@ Use it when running a **serious audit** on:
 For each domain:
 1. read the listed file types in the target repo
 2. ask the listed deep questions
-3. compare against the referenced case-study / benchmark patterns
+3. compare against the referenced case-study / benchmark patterns **and** the explicit `domain_anchors` from `benchmarks/case-anchors.yaml`
 4. judge the repo in a **stage-aware** way
 5. output evidence-backed conclusions and next actions
 
@@ -33,6 +33,18 @@ Then gate conclusions accordingly:
 - for `public` / `growth`, missing external readiness is a real gap
 - never zero-fill missing evidence; use `UNVERIFIED`, `partial`, or `N/A`
 
+## Tier-1 Empirical Anchors
+
+Every dimension below references empirical data from `benchmarks/case-anchors.yaml`. Key quantitative anchors for contextual comparison:
+
+| Metric | Tier-1 P50 | Implication |
+|--------|:----------:|-------------|
+| Stars | 75K | Below 50K at <6mo = not yet Tier-1 |
+| Monthly velocity | 22.6K/mo | Below 10K/mo = unlikely to converge |
+| Fork/star ratio | 15.5% | Below 8% = low hands-on adoption |
+| Issues/star ratio | 0.33% | Above 1% = triage risk |
+| Release cadence | daily | Interval >5 days = falls behind Tier-1 |
+
 ---
 
 ## 1. Facade
@@ -47,6 +59,9 @@ Then gate conclusions accordingly:
   - `case-studies/andrej-karpathy-skills.md`
   - `case-studies/everything-claude-code.md`
   - `benchmarks/facade.md`
+  - case-anchors `fac-3`: Symptom-first README (karpathy-skills)
+  - case-anchors `fac-1`: Concrete real-world actions (openclaw)
+  - case-anchors `fac-4`: Benchmark anchoring vs competitor (worldmonitor)
 - **Judge**:
   - strong if the repo states who it is for, what first success looks like, and the claim matches the actual implementation surface
 
@@ -83,8 +98,8 @@ Then gate conclusions accordingly:
 - **Compare against**:
   - `case-studies/oh-my-openagent.md`
   - `playbooks/facade.md`
+  - case-anchors `fac-2`: Anti-lock-in / contrarian positioning (oh-my-openagent)
 - **Judge**:
-  - strong if names, install path, and code boundaries reinforce one coherent mental model
 
 ---
 
@@ -148,6 +163,8 @@ Then gate conclusions accordingly:
   - `case-studies/openclaw.md`
   - `case-studies/everything-claude-code.md`
   - `benchmarks/community.md`
+  - case-anchors `com-1`: Disable blank issues + route to chat (openclaw, oh-my-openagent)
+  - case-anchors `com-2`: Bug template requires grounded evidence (openclaw)
 - **Judge**:
   - strong if the repo is designed for load, not just public appearance
 
@@ -159,8 +176,8 @@ Then gate conclusions accordingly:
 - **Compare against**:
   - `case-studies/oh-my-openagent.md`
   - `playbooks/community.md`
+  - case-anchors `com-3`: PR template enforces typecheck + test + verification (openclaw, oh-my-openagent)
 - **Judge**:
-  - strong if collaboration is enabled without hidden social/process traps
 
 ### C3. Release communication loop
 - **Read**: releases, changelog, release notes, roadmap, announcements, docs history
@@ -171,8 +188,8 @@ Then gate conclusions accordingly:
   - `case-studies/openclaw.md`
   - `case-studies/oh-my-openagent.md`
   - `playbooks/release.md`
+  - case-anchors `com-5`: Daily-cadence releases, median interval ≤ 2 days (openclaw, oh-my-openagent)
 - **Judge**:
-  - strong if a real user can track the project's evolution without reading commit history
 
 ### C4. Contribution funnel realism
 - **Read**: dev setup, first issue path, tests, examples, labeling, workflow depth
@@ -198,6 +215,8 @@ Then gate conclusions accordingly:
   - `benchmarks/quality.md`
   - `case-studies/openclaw.md`
   - `playbooks/quality.md`
+  - case-anchors `qua-1`: CI as preflight router, not single pipeline (openclaw)
+  - case-anchors `qua-2`: Multi-platform binary release matrix (openclaw, oh-my-openagent)
 - **Judge**:
   - strong if safety mechanisms match the repo's risk surface and actually gate change
 
@@ -233,6 +252,7 @@ Then gate conclusions accordingly:
   - `benchmarks/quality.md`
   - `case-studies/everything-claude-code.md`
   - `playbooks/release.md`
+  - case-anchors `qua-3`: SECURITY.md with trust model + out-of-scope (openclaw)
 - **Judge**:
   - strong if maintenance is institutionalized rather than personality-dependent
 
