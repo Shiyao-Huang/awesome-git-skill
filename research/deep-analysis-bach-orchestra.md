@@ -1,7 +1,27 @@
 # Deep Analysis: bach-orchestra (Shiyao-Huang/bach-orchestra)
 
 > Based on local worktree analysis using 24-dimension deep-analysis-dimensions.md framework.
-> Stage: **public (pre-launch)** — public repo but 0 releases, 1 star, pre-broad-launch.
+> Covers both `main` branch and `remerge/online-v5-packages` branch.
+
+---
+
+## Branch Comparison: main vs remerge
+
+| Aspect | main | remerge/online-v5-packages |
+|--------|------|---------------------------|
+| Root files | README, CONTRIBUTING, SECURITY, GOVERNANCE, etc. | README, package.json only |
+| .github/ | ci.yml (7 jobs) | **Missing** — no CI |
+| docs/ | 17+ docs (architecture, deploy, env, etc.) | **Missing** — no docs surface |
+| apps/ | kanban | N/A (moved to packages/) |
+| services/ | happy-server, genome-hub | N/A (moved to packages/) |
+| packages/ | aha-cli only | happy-app, happy-cli, happy-server, genome-hub |
+| Package manager | npm + yarn (mixed) | yarn (unified) |
+| Tests | ~290 test files | 280 test files |
+| Dockerfiles | 0 | 4 (one per package) |
+| Node requirement | ≥20 | ≥22 |
+| Governance files | 5 (CONTRIBUTING, SECURITY, etc.) | 0 |
+
+**Key insight**: The remerge branch is a **clean technical monorepo merge** of 4 independent repositories. It has the code unified but lacks all the public-facing surfaces (CI, docs, governance) that main has.
 
 ---
 
@@ -340,3 +360,80 @@ Bach Orchestra has **strong sub-package engineering maturity** (290 test files, 
 6. **Standardize package manager** — Pick npm or yarn across all components.
 7. **Add release workflow** — Automated semver + tag-triggered publishing.
 8. **Add devcontainer** — Reduce "works on my machine" risk for contributors.
+
+---
+
+## Remerge Branch Deep Analysis (`remerge/online-v5-packages`)
+
+> The remerge branch merges 4 independent repos into one workspace. This section analyzes what the remerge branch specifically adds or loses vs main.
+
+### What Remerge Gets Right (vs main)
+
+**Unified workspace**: All 4 packages (happy-app, happy-cli, happy-server, genome-hub) live under `packages/` with proper `yarn workspaces`. One `yarn install` at root installs everything. This is cleaner than main's mixed `apps/` + `services/` + `packages/` taxonomy.
+
+**Consistent package manager**: Remerge uses `yarn@1.22.22` uniformly. Main mixes npm (genome-hub) and yarn (everything else).
+
+**Dockerfiles per package**: Each package has its own Dockerfile. Main has none at root level. This means the remerge branch is closer to a deployable state at the package level.
+
+**Vitest everywhere**: All 4 packages have `vitest.config.ts`. Consistent test framework is better than main's potentially mixed setups.
+
+**Per-package test coverage**:
+| Package | TS Files | Tests | Ratio |
+|---------|--------:|------:|------:|
+| happy-app (kanban) | 404 | 93 | 23% |
+| happy-cli (aha-agi) | 395 | 132 | 33% |
+| happy-server | 189 | 43 | 23% |
+| genome-hub | 48 | 12 | 25% |
+| **Total** | **1,036** | **280** | **27%** |
+
+The CLI has the highest test density (33%) — good for the most user-facing component.
+
+### What Remerge Loses (vs main)
+
+**No CI**: Zero `.github/` directory. Main has 7 CI jobs. This is a critical gap — the remerge branch cannot validate itself in CI.
+
+**No docs surface**: Zero `docs/` directory. Main has 17+ docs covering architecture, deployment, environment, release process, branding, etc.
+
+**No governance**: No CONTRIBUTING.md, SECURITY.md, GOVERNANCE.md, CODE_OF_CONDUCT.md, SUPPORT.md. Main has all 5.
+
+**No root README**: The remerge README is a technical import note ("clean monorepo trial"), not a product landing page. It references internal paths (`/Users/jiangziyou/code/aha/...`).
+
+**No release artifacts**: Same as main — 0 releases.
+
+### Remerge-Specific Issues
+
+1. **Internal path leakage**: README references `/Users/jiangziyou/code/aha/happy` — a developer's local machine path. Must be cleaned before any public visibility.
+
+2. **Naming inconsistency**: Root `package.json` says `bach-orchestra` but description says "Happy/Aha app, CLI, server, and genome registry". The remerge branch hasn't been renamed to Bach yet — it still uses Happy/Aha naming in most places.
+
+3. **happy-server author**: `package.json` lists author as "Steve Korshakov <steve@korshakov.com>" with repository `slopus/aha-server.git`. This is fine for attribution but the public-facing package should probably list the org, not an individual.
+
+4. **genome-hub has implementation docs in Chinese**: `IMPLEMENT计划.md`, `FIX-RECORD-P0-MACHines-500.md` — internal working documents that shouldn't be in the public branch without translation or removal.
+
+5. **Prisma migrations included**: 7 migration files with timestamps. These are valuable (real schema evolution) but should be documented.
+
+6. **`.env` dependency**: happy-server scripts use `.env.dev`, `.env.integration-test`. No `.env.example` committed — new developers won't know what environment variables to set.
+
+### Remerge Merge Readiness Assessment
+
+| Capability | Status | Blocker? |
+|-----------|--------|---------|
+| Code compiles | Likely yes (yarn workspaces + per-package builds) | No |
+| Tests pass | 280 tests exist but no CI to verify | No (local only) |
+| CI pipeline | Missing | **Yes** |
+| Public README | Missing (technical import note only) | **Yes** |
+| Governance files | Missing | **Yes** |
+| Docs | Missing | No (can port from main) |
+| Naming consistency | Partial (Happy/Aha vs Bach) | No (can fix in merge commit) |
+| Internal paths leaked | Yes (README, genome-hub docs) | **Yes** |
+| Dockerfiles | Present (4/4 packages) | No |
+
+### Recommended Merge Path
+
+1. **Fix blockers first**: Remove internal paths, add .env.example, remove/translate Chinese internal docs
+2. **Port CI from main**: Adapt the 7-job CI to work with the flat `packages/` structure
+3. **Port docs from main**: Adapt to the new flat structure
+4. **Port governance from main**: CONTRIBUTING, SECURITY, etc. need path updates
+5. **Unify naming**: Decide on Bach vs Aha and do a find-replace before merge
+6. **Create root README**: Product landing page, not import notes
+7. **Merge to main**: With all surfaces in place
