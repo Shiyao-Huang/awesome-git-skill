@@ -1,0 +1,4 @@
+interface:
+  display_name: "OSS Scorecard"
+  short_description: "Audit a GitHub repo across six OSS growth domains and suggest the highest-leverage fixes."
+  default_prompt: "Run an OSS scorecard on this repository. Collect public evidence, map it to the six domains, identify the top gaps, and recommend the highest-leverage fixes grounded in this workspace's benchmarks, playbooks, and case studies."

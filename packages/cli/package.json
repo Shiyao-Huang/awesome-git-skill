@@ -1,0 +1,8 @@
+{
+  "name": "@oss-scorecard/cli",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "oss-scorecard": "./src/index.ts"
+  }
+}

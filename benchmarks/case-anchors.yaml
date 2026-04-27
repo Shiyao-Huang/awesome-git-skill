@@ -1,0 +1,399 @@
+# benchmarks/case-anchors.yaml
+#
+# Empirical anchor data extracted from Tier-1 case studies (6 projects, 2-6 month
+# explosive-growth cohort, captured 2026-04-27). This file is NOT a-priori threshold
+# rules — those live in benchmarks/<dim>.md. This file is observed-percentile data
+# usable by the scoring engine to answer:
+#   "How does this repo compare against breakout cohort P50 / P75?"
+#
+# Hard rules:
+# 1. Every metric here must trace to a case-study source path.
+# 2. UNVERIFIED entries are marked explicitly; never silently zero-filled.
+# 3. Recompute by re-running tools/scorecard-run + indexer; do not hand-edit.
+# 4. Scoring engine must NOT use these anchors as thresholds without an explicit
+#    rubric mapping in benchmarks/<dim>.md (anchors inform; rubrics decide).
+
+meta:
+  version: 0.1.0
+  status: draft
+  cohort: tier1-explosive-2-6mo
+  cohort_size: 6
+  capture_date: "2026-04-27"
+  growth_class: explosive
+  cohort_window_months: [2, 6]
+  source_inventory:
+    - case-studies/openclaw.md
+    - case-studies/everything-claude-code.md
+    - case-studies/andrej-karpathy-skills.md
+    - case-studies/mirofish.md
+    - case-studies/oh-my-openagent.md
+    - case-studies/worldmonitor.md
+  comparison_matrix: research/tier1-comparison-matrix.md
+
+# --- Sample roster (raw observations) ---------------------------------------
+# Each row is a single project at capture_date. Used as the underlying sample
+# for every percentile / ratio computed below. Edit only by re-deriving from
+# the linked case-study front-matter.
+
+samples:
+  - id: case-openclaw
+    project: openclaw
+    repo_url: https://github.com/openclaw/openclaw
+    category: ai-app
+    license_spdx: MIT
+    primary_language: TypeScript
+    stars: 364826
+    forks: 74719
+    open_issues: 7210
+    age_months: 5.1
+    monthly_star_velocity: 71529
+    contributors_bucket: "1k+"
+    top1_contributor_commits: 21381
+    release_cadence: daily
+    has_brand_site: true
+    has_docs_site: true
+
+  - id: case-everything-claude-code
+    project: everything-claude-code
+    repo_url: https://github.com/everything-claude-code/everything-claude-code
+    category: dev-tool
+    license_spdx: MIT
+    primary_language: JavaScript
+    stars: 167783
+    forks: 26002
+    open_issues: 140 # approx; case study notes <0.1% issues/stars
+    age_months: 3.3
+    monthly_star_velocity: 50836
+    contributors_bucket: "50-200"
+    top1_contributor_commits: 965
+    release_cadence: every-5-days
+    has_brand_site: true
+    has_docs_site: true
+
+  - id: case-andrej-karpathy-skills
+    project: andrej-karpathy-skills
+    repo_url: https://github.com/forrestchang/andrej-karpathy-skills
+    category: productivity
+    license_spdx: MIT
+    primary_language: Markdown
+    stars: 91425
+    forks: 8757
+    open_issues: 73
+    age_months: 3.0
+    monthly_star_velocity: 30454
+    contributors_bucket: "<50"
+    top1_contributor_commits: 10  # approx (case study: ~10 commits)
+    release_cadence: none
+    has_brand_site: false
+    has_docs_site: false
+
+  - id: case-mirofish
+    project: MiroFish
+    repo_url: https://github.com/666ghj/mirofish
+    category: ai-app
+    license_spdx: AGPL-3.0
+    primary_language: Python
+    stars: 57614
+    forks: 8893
+    open_issues: 230 # approx, derived from issues/stars 0.4%
+    age_months: 5.0
+    monthly_star_velocity: 11522
+    contributors_bucket: "<50"
+    top1_contributor_commits: 225
+    release_cadence: monthly
+    has_brand_site: true
+    has_docs_site: true
+
+  - id: case-oh-my-openagent
+    project: oh-my-openagent
+    repo_url: https://github.com/code-yeongyu/oh-my-openagent
+    category: dev-tool
+    license_spdx: NOASSERTION # repo API; LICENSE.md = SUL-1.0
+    primary_language: TypeScript
+    stars: 54335
+    forks: 4415
+    open_issues: 662
+    age_months: 4.8
+    monthly_star_velocity: 11317
+    contributors_bucket: "200-1k"
+    top1_contributor_commits: 3460
+    release_cadence: daily
+    has_brand_site: true
+    has_docs_site: true
+
+  - id: case-worldmonitor
+    project: WorldMonitor
+    repo_url: https://github.com/koala73/worldmonitor
+    category: ai-app
+    license_spdx: NOASSERTION
+    primary_language: TypeScript
+    stars: 52763
+    forks: 8459
+    open_issues: 133
+    age_months: 3.6
+    monthly_star_velocity: 14656
+    contributors_bucket: "UNVERIFIED: api did not return contributors page"
+    top1_contributor_commits: "UNVERIFIED: api did not return contributors page"
+    release_cadence: "UNVERIFIED: api did not return release cadence"
+    has_brand_site: true
+    has_docs_site: false # brand site only, no separate docs site
+
+# --- Quantitative anchors (derived from samples above) ----------------------
+# All percentiles use the simple linear interpolation method on the n=6 sample.
+# Recompute when samples change.
+
+anchors:
+
+  # ---- size & velocity --------------------------------------------------
+  stars:
+    unit: count
+    n: 6
+    min: 52763
+    p25: 54335
+    p50: 74519
+    p75: 167783
+    max: 364826
+    notes: |
+      Tier-1 entry threshold ≈ 50K stars at 2-6 month age. Anything below 50K
+      with comparable age does not yet qualify as Tier-1; treat as Tier-2 or
+      cohort-incomparable until promoted.
+
+  monthly_star_velocity:
+    unit: stars_per_month
+    n: 6
+    min: 11317
+    p25: 11522
+    p50: 22555
+    p75: 50836
+    max: 71529
+    notes: |
+      Computed as stars / age_months. Median ≈ 22.6K stars/mo. Repos under
+      ~10K stars/mo at <6 month age are unlikely to converge to Tier-1.
+
+  fork_to_star_ratio:
+    unit: ratio
+    n: 6
+    min: 0.081
+    p25: 0.096
+    p50: 0.155
+    p75: 0.160
+    max: 0.205
+    notes: |
+      Median ≈ 15.5%. Below 8% suggests low fork intent (content / single-file
+      projects skew low). Above 20% suggests heavy hands-on adoption (platform
+      / runtime projects). Both extremes are valid — interpret category-aware.
+
+  open_issues_to_stars_ratio:
+    unit: ratio
+    n: 6
+    min: 0.0008
+    p25: 0.0010
+    p50: 0.0033
+    p75: 0.0120
+    max: 0.0200
+    notes: |
+      Median ≈ 0.33%. Above 1% indicates issue-load risk for the team's
+      triage capacity at current star velocity. Below 0.1% is either very
+      tight gating (templates + chat-channel deflection) or unverified data.
+
+  age_months_at_capture:
+    unit: months
+    n: 6
+    min: 3.0
+    p50: 4.2
+    max: 5.1
+    notes: |
+      Defines the Tier-1 cohort window. Anchors should not be reused for repos
+      outside this 2-6 month explosive-growth window without explicit recompute.
+
+  top1_contributor_commit_dominance:
+    unit: count
+    n: 5  # worldmonitor unverified
+    min: 10
+    p50: 965  # everything-claude-code
+    max: 21381
+    notes: |
+      Long-tailed; confirms "single-author-driven" hypothesis. 4/5 verified
+      projects have one contributor with >>10× the median commit count of
+      others. Treat as risk signal (Bus Factor) not strength.
+
+  # ---- categorical distributions (n=6) ----------------------------------
+  license_distribution:
+    MIT: 3
+    AGPL-3.0: 1
+    NOASSERTION: 2
+    notes: |
+      MIT is the modal license among Tier-1 (50%). NOASSERTION (no SPDX-detectable
+      license) appears in 33% — does not block growth at this stage but limits
+      enterprise adoption surface.
+
+  primary_language_distribution:
+    TypeScript: 3
+    JavaScript: 1
+    Python: 1
+    Markdown: 1
+    notes: |
+      4/6 are JS/TS family. Markdown (karpathy-skills) demonstrates content
+      projects can hit Tier-1 without code language.
+
+  category_distribution:
+    ai-app: 3
+    dev-tool: 2
+    productivity: 1
+    notes: |
+      All Tier-1 in cohort have AI-adjacent positioning. Non-AI Tier-1 in this
+      window: 0/6 — see research/cohort-explosive-2-6mo-candidates.md notes
+      on why we did not force a non-AI anchor.
+
+  release_cadence_distribution:
+    daily: 2
+    every-5-days: 1
+    monthly: 1
+    none: 1
+    UNVERIFIED: 1
+    notes: |
+      Top-2 by stars (openclaw, oh-my-openagent) ship daily. Content-only
+      projects (karpathy-skills) ship via README updates, not GitHub releases.
+
+  has_brand_or_docs_site:
+    yes: 5
+    no: 1
+    notes: |
+      5/6 projects own a brand or docs site. Karpathy-skills is the explicit
+      counterexample (single-file content product). Treat brand-site presence
+      as a strong but not necessary Tier-1 signal.
+
+# --- Domain qualitative anchors --------------------------------------------
+# Per-domain "what Tier-1 actually does" cheat sheet, mined from each case
+# study's §3 evaluation. Each item links back to the case study it came from
+# so the scoring engine can cite empirical precedent in its rationale.
+
+domain_anchors:
+
+  facade:
+    tier1_observed_practices:
+      - id: fac-1
+        practice: "Translate AI capability into concrete real-world actions ('clears your inbox', 'sends emails')"
+        seen_in: [case-openclaw]
+        evidence: case-studies/openclaw.md#facade
+      - id: fac-2
+        practice: "Anti-lock-in / contrarian positioning vs incumbent ('Claude Code is a nice prison')"
+        seen_in: [case-oh-my-openagent]
+        evidence: case-studies/oh-my-openagent.md#facade
+      - id: fac-3
+        practice: "Symptom-first README — describe user pain before listing features"
+        seen_in: [case-andrej-karpathy-skills]
+        evidence: case-studies/andrej-karpathy-skills.md#facade
+      - id: fac-4
+        practice: "Commercial benchmark anchoring ('open-source Palantir')"
+        seen_in: [case-worldmonitor]
+        evidence: case-studies/worldmonitor.md#facade
+      - id: fac-5
+        practice: "Sponsor logo wall on README hero (institutional trust signal)"
+        seen_in: [case-openclaw]
+        evidence: case-studies/openclaw.md#facade
+
+  docs:
+    tier1_observed_practices:
+      - id: doc-1
+        practice: "Mintlify / Next-based dedicated docs site separate from README"
+        seen_in: [case-openclaw, case-everything-claude-code, case-mirofish, case-oh-my-openagent]
+      - id: doc-2
+        practice: "Dual install path: humans vs LLM agents (e.g. curl vs fetch constraints)"
+        seen_in: [case-oh-my-openagent]
+        evidence: case-studies/oh-my-openagent.md#docs
+      - id: doc-3
+        practice: "Multi-language README (≥3 languages) shipped within first 5 months"
+        seen_in: [case-oh-my-openagent, case-andrej-karpathy-skills]
+      - id: doc-4
+        practice: "`onboard` / wizard CLI as canonical first-step rather than free-form quickstart"
+        seen_in: [case-openclaw]
+
+  community:
+    tier1_observed_practices:
+      - id: com-1
+        practice: "Disable blank issues; route via .github/ISSUE_TEMPLATE/config.yml to chat (Discord)"
+        seen_in: [case-openclaw, case-oh-my-openagent]
+      - id: com-2
+        practice: "Bug template requires grounded evidence + NOT_ENOUGH_INFO marker"
+        seen_in: [case-openclaw]
+        evidence: case-studies/openclaw.md#community
+      - id: com-3
+        practice: "PR template enforces typecheck + test + verification evidence"
+        seen_in: [case-oh-my-openagent, case-openclaw]
+      - id: com-4
+        practice: "'Building in Public' Discord channel as primary growth surface"
+        seen_in: [case-oh-my-openagent]
+      - id: com-5
+        practice: "Daily-cadence stable releases (median release interval ≤ 2 days)"
+        seen_in: [case-openclaw, case-oh-my-openagent]
+
+  quality:
+    tier1_observed_practices:
+      - id: qua-1
+        practice: "CI structured as preflight router (docs-only, changed-scope, platform matrix) rather than single pipeline"
+        seen_in: [case-openclaw]
+        evidence: case-studies/openclaw.md#quality
+      - id: qua-2
+        practice: "Multi-platform binary release matrix (≥3 platforms) automated in workflow"
+        seen_in: [case-oh-my-openagent, case-openclaw]
+      - id: qua-3
+        practice: "SECURITY.md with explicit trust model + out-of-scope + operator boundary"
+        seen_in: [case-openclaw]
+      - id: qua-4
+        practice: "Dedicated trust subdomain (trust.<brand>) for AI agents performing real-world actions"
+        seen_in: [case-openclaw]
+
+  caselib:
+    tier1_observed_practices:
+      - id: cas-1
+        practice: "Three-layer social proof: sponsors + shoutouts + community showcase (no need for enterprise logo wall)"
+        seen_in: [case-openclaw]
+        evidence: case-studies/openclaw.md#caselib
+      - id: cas-2
+        practice: "EXAMPLES.md as case-library substitute for content/methodology projects"
+        seen_in: [case-andrej-karpathy-skills]
+      - id: cas-3
+        practice: "README Reviews section pulling X/YouTube quotes as developer-tool social proof"
+        seen_in: [case-oh-my-openagent]
+    tier1_caveats:
+      - "Named enterprise deployments are NOT visible on most Tier-1 surfaces. Do not score enterprise-adoption proxies as required at this stage."
+
+  tooling:
+    tier1_observed_practices:
+      - id: too-1
+        practice: "Single content source → multiple runtime distributions (Skill + Cursor rule + plugin)"
+        seen_in: [case-andrej-karpathy-skills]
+      - id: too-2
+        practice: "Monorepo unifies docs / skills / CLI / mobile / channels under one release system"
+        seen_in: [case-openclaw]
+      - id: too-3
+        practice: "Median release interval ≤ 2 days backed by automated semver + dual-package npm publish"
+        seen_in: [case-oh-my-openagent]
+        evidence: case-studies/oh-my-openagent.md#tooling
+      - id: too-4
+        practice: "Docker release pipeline with tag gating + GHCR push + manual backfill approval"
+        seen_in: [case-openclaw]
+
+# --- Scoring-engine usage hints --------------------------------------------
+# Non-binding suggestions for packages/core/. The engine owns final scoring;
+# these are anchors, not rules.
+
+usage_hints:
+  comparative_scoring:
+    description: |
+      For any signal that has an `anchors.<metric>.p50` value, the engine MAY
+      report "this repo is at Pxx of Tier-1 cohort" alongside its own threshold
+      score. Do NOT overwrite the threshold score with the percentile score —
+      the two are orthogonal and report side-by-side.
+  domain_practice_citations:
+    description: |
+      When a benchmarks/<dim>.md rubric subitem matches a `domain_anchors.<dim>.tier1_observed_practices.*`
+      entry, the engine MAY append the matching `seen_in` case-study list as
+      empirical precedent in its evidence trail. This is informative only.
+  refresh_policy: |
+    Recompute this file when:
+      - Any sample case-study front-matter changes (stars / forks / age / etc.)
+      - A new project promotes into the Tier-1 cohort
+      - A Tier-1 sample drops out (license change, abandonment)
+    Stale-warning threshold: 30 days from `meta.capture_date`.

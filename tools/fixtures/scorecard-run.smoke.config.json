@@ -1,0 +1,82 @@
+{
+  "project": "shadcn-ui/ui-smoke",
+  "repo_url": "https://github.com/shadcn-ui/ui",
+  "case_study_path": "case-studies/EXAMPLE.md",
+  "dimensions": ["facade"],
+  "allow_partial_dimensions": true,
+  "strict": true,
+  "signal_values": {
+    "facade.hero.has_demo_asset": {
+      "value": 1,
+      "captured_at": "2026-04-27",
+      "evidence_paths": ["case-studies/EXAMPLE.md"],
+      "note": "Synthetic smoke fixture value for CLI verification only"
+    },
+    "facade.hero.tagline_length_words": {
+      "value": 13,
+      "score": 5,
+      "captured_at": "2026-04-27",
+      "evidence_paths": ["case-studies/EXAMPLE.md"],
+      "note": "Synthetic smoke fixture value for CLI verification only"
+    },
+    "facade.hero.has_cta": {
+      "value": 1,
+      "captured_at": "2026-04-27",
+      "evidence_paths": ["case-studies/EXAMPLE.md"],
+      "note": "Synthetic smoke fixture value for CLI verification only"
+    },
+    "facade.badges.count_valid": {
+      "value": 2,
+      "captured_at": "2026-04-27",
+      "evidence_paths": ["case-studies/EXAMPLE.md"],
+      "note": "Synthetic smoke fixture value for CLI verification only"
+    },
+    "facade.badges.has_release_badge": {
+      "value": 0,
+      "captured_at": "2026-04-27",
+      "evidence_paths": ["case-studies/EXAMPLE.md"],
+      "note": "Synthetic smoke fixture value for CLI verification only"
+    },
+    "facade.demo.has_playground_url": {
+      "value": 1,
+      "captured_at": "2026-04-27",
+      "evidence_paths": ["case-studies/EXAMPLE.md"],
+      "note": "Synthetic smoke fixture value for CLI verification only"
+    },
+    "facade.demo.gif_size_kb": {
+      "value": 0,
+      "captured_at": "2026-04-27",
+      "evidence_paths": ["case-studies/EXAMPLE.md"],
+      "note": "Synthetic smoke fixture value for CLI verification only"
+    },
+    "facade.social.og_image_present": {
+      "value": 0,
+      "captured_at": "2026-04-27",
+      "evidence_paths": ["case-studies/EXAMPLE.md"],
+      "note": "Synthetic smoke fixture value for CLI verification only"
+    },
+    "facade.social.twitter_card_present": {
+      "value": 0,
+      "captured_at": "2026-04-27",
+      "evidence_paths": ["case-studies/EXAMPLE.md"],
+      "note": "Synthetic smoke fixture value for CLI verification only"
+    },
+    "facade.tagline.manual_rubric": {
+      "score": 3,
+      "captured_at": "2026-04-27",
+      "evidence_paths": ["case-studies/EXAMPLE.md"],
+      "note": "Synthetic smoke fixture value for CLI verification only"
+    },
+    "facade.hero.tagline_length_words": {
+      "value": 13,
+      "score": 5,
+      "captured_at": "2026-04-27",
+      "evidence_paths": ["case-studies/EXAMPLE.md"],
+      "note": "Synthetic smoke fixture value for CLI verification only"
+    }
+  },
+  "output": {
+    "json_path": "tools/.tmp/scorecard-smoke.json",
+    "markdown_path": "tools/.tmp/scorecard-smoke.md"
+  }
+}

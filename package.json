@@ -1,0 +1,25 @@
+{
+  "name": "oss-scorecard",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "bin": {
+    "oss-scorecard": "./bin/oss-scorecard.mjs"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "help": "node ./bin/oss-scorecard.mjs --help",
+    "history": "node ./bin/oss-scorecard.mjs history",
+    "index": "node ./bin/oss-scorecard.mjs index --root .",
+    "audit": "node ./bin/oss-scorecard.mjs audit",
+    "score": "node ./bin/oss-scorecard.mjs score",
+    "release:preflight": "node ./scripts/release-preflight.mjs",
+    "test": "node --experimental-strip-types --test ./bin/*.test.mjs packages/core/src/score.test.ts packages/core/src/github.test.ts packages/cli/src/format.test.ts packages/collectors/src/github-repo.test.ts && npm --prefix tools test",
+    "test:bin": "node --test ./bin/*.test.mjs",
+    "test:oss-scorecard": "node --experimental-strip-types --test packages/core/src/score.test.ts packages/core/src/github.test.ts packages/cli/src/format.test.ts packages/collectors/src/github-repo.test.ts"
+  }
+}

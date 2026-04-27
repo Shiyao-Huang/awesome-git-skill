@@ -1,0 +1,56 @@
+{
+  "date": "2026-04-27",
+  "project": "oss-scorecard",
+  "execution_team": "opensource-optimizer",
+  "tasks": [
+    {
+      "title": "Publish Legion to genome-hub",
+      "objective": "Create a professional OSS team and sync it to genome-hub",
+      "status": "done",
+      "artifacts": [
+        "plans/legion-spec.md",
+        "plans/legion-publish-log.md"
+      ],
+      "result": {
+        "teamName": "opensource-optimizer",
+        "corpsId": "cmogou8fn000u1403dndkdicg"
+      }
+    },
+    {
+      "title": "Build Tier-1 2-6 month breakout cohort",
+      "status": "done",
+      "artifacts": [
+        "research/cohort-explosive-2-6mo-candidates.md",
+        "research/tier1-comparison-matrix.md"
+      ]
+    },
+    {
+      "title": "Normalize Tier-1 case studies to template v1",
+      "status": "done",
+      "artifacts": [
+        "case-studies/openclaw.md",
+        "case-studies/everything-claude-code.md",
+        "case-studies/andrej-karpathy-skills.md",
+        "case-studies/mirofish.md",
+        "case-studies/oh-my-openagent.md",
+        "case-studies/worldmonitor.md"
+      ]
+    },
+    {
+      "title": "Run strict front-matter index over full repo",
+      "status": "done",
+      "artifacts": [
+        "tools/index.ts"
+      ]
+    },
+    {
+      "title": "Choose public product name and history-sharing model",
+      "status": "done",
+      "artifacts": [
+        "README.md",
+        "history/README.md",
+        "history/task-ledger.jsonl"
+      ]
+    }
+  ]
+}

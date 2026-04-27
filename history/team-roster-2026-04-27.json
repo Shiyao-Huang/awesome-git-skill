@@ -1,0 +1,49 @@
+{
+  "date": "2026-04-27",
+  "project": "oss-scorecard",
+  "execution_team": "opensource-optimizer",
+  "roster": [
+    {
+      "role": "master",
+      "runtime": "claude",
+      "count": 1,
+      "responsibility": "coordination, routing, milestone closure"
+    },
+    {
+      "role": "solution-architect",
+      "runtime": "claude",
+      "count": 1,
+      "responsibility": "schema, benchmark, CLI architecture review"
+    },
+    {
+      "role": "researcher",
+      "runtime": "claude",
+      "count": 1,
+      "responsibility": "cohort selection, candidate research, comparison matrices"
+    },
+    {
+      "role": "implementer",
+      "runtime": "codex",
+      "count": 10,
+      "responsibility": "case studies, tool implementation, validation, formatting"
+    },
+    {
+      "role": "org-manager",
+      "runtime": "claude",
+      "count": 1,
+      "responsibility": "team composition, spawn/replace/recovery"
+    },
+    {
+      "role": "supervisor",
+      "runtime": "claude",
+      "count": 1,
+      "responsibility": "governance, scoring, anomaly detection"
+    },
+    {
+      "role": "agent-builder",
+      "runtime": "claude/codex",
+      "count": 2,
+      "responsibility": "Legion spec, genome publish, corps assembly"
+    }
+  ]
+}

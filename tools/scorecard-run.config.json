@@ -1,0 +1,13 @@
+{
+  "project": "owner/repo",
+  "repo_url": "https://github.com/owner/repo",
+  "case_study_path": "case-studies/<slug>.md",
+  "dimensions": ["facade"],
+  "allow_partial_dimensions": true,
+  "strict": true,
+  "signal_values": {},
+  "output": {
+    "json_path": "metrics/scorecard/latest.json",
+    "markdown_path": "metrics/scorecard/latest.md"
+  }
+}

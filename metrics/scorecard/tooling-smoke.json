@@ -1,0 +1,273 @@
+{
+  "project": "shadcn-ui",
+  "repo_url": "https://github.com/shadcn-ui/ui",
+  "ran_at": "2026-04-27T02:33:44.671Z",
+  "scorecard_version": "0.1.0",
+  "strict": true,
+  "overall": 70,
+  "overall_mode": "partial-normalized",
+  "requested_dimensions": [
+    "tooling"
+  ],
+  "skipped": [],
+  "dimensions": {
+    "tooling": {
+      "weight": 0.1,
+      "score": 70,
+      "benchmark_status": "draft",
+      "benchmark_file": "benchmarks/tooling.md",
+      "subitems": {
+        "tooling:scorecard-run": {
+          "leaf_tag": "tooling:scorecard-run",
+          "name": "scorecard-run",
+          "aggregation": "weighted",
+          "score": 3.5,
+          "signals": [
+            {
+              "signal_id": "tooling.scorecard_run.runtime_seconds",
+              "source": "github_repo",
+              "collector": "tools/scorecard-run/collectors/scorecard_runtime.ts",
+              "input": 1,
+              "score": 5,
+              "captured_at": "2026-04-27",
+              "evidence_paths": [
+                "benchmarks/tooling.md"
+              ]
+            },
+            {
+              "signal_id": "tooling.scorecard_run.dimension_config_coverage",
+              "source": "github_repo",
+              "collector": "tools/scorecard-run/collectors/scorecard_config_coverage.ts",
+              "input": 1,
+              "score": 5,
+              "captured_at": "2026-04-27",
+              "evidence_paths": [
+                "benchmarks/tooling.md"
+              ]
+            },
+            {
+              "signal_id": "tooling.scorecard_run.strict_negative_suite_count",
+              "source": "github_repo",
+              "collector": "tools/scorecard-run/collectors/scorecard_negative_suite.ts",
+              "input": 1,
+              "score": 0,
+              "captured_at": "2026-04-27",
+              "evidence_paths": [
+                "benchmarks/tooling.md"
+              ]
+            }
+          ]
+        },
+        "tooling:social-gen": {
+          "leaf_tag": "tooling:social-gen",
+          "name": "social-gen",
+          "aggregation": "mean",
+          "score": 3.7,
+          "signals": [
+            {
+              "signal_id": "tooling.social_gen.render_success_rate_30d",
+              "source": "github_repo",
+              "collector": "tools/scorecard-run/collectors/social_gen_success.ts",
+              "input": 1,
+              "score": 5,
+              "captured_at": "2026-04-27",
+              "evidence_paths": [
+                "benchmarks/tooling.md"
+              ]
+            },
+            {
+              "signal_id": "tooling.social_gen.template_variant_count",
+              "source": "github_repo",
+              "collector": "tools/scorecard-run/collectors/social_gen_templates.ts",
+              "input": 1,
+              "score": 1,
+              "captured_at": "2026-04-27",
+              "evidence_paths": [
+                "benchmarks/tooling.md"
+              ]
+            },
+            {
+              "signal_id": "tooling.social_gen.snapshot_test_rate",
+              "source": "github_repo",
+              "collector": "tools/scorecard-run/collectors/social_gen_snapshot.ts",
+              "input": 1,
+              "score": 5,
+              "captured_at": "2026-04-27",
+              "evidence_paths": [
+                "benchmarks/tooling.md"
+              ]
+            }
+          ]
+        },
+        "tooling:lighthouse": {
+          "leaf_tag": "tooling:lighthouse",
+          "name": "lighthouse",
+          "aggregation": "weighted",
+          "score": 1,
+          "signals": [
+            {
+              "signal_id": "tooling.lighthouse.perf_score_p50",
+              "source": "lighthouse",
+              "collector": "tools/scorecard-run/collectors/lighthouse_perf.ts",
+              "input": 1,
+              "score": 0,
+              "captured_at": "2026-04-27",
+              "evidence_paths": [
+                "benchmarks/tooling.md"
+              ]
+            },
+            {
+              "signal_id": "tooling.lighthouse.seo_score_p50",
+              "source": "lighthouse",
+              "collector": "tools/scorecard-run/collectors/lighthouse_seo.ts",
+              "input": 1,
+              "score": 0,
+              "captured_at": "2026-04-27",
+              "evidence_paths": [
+                "benchmarks/tooling.md"
+              ]
+            },
+            {
+              "signal_id": "tooling.lighthouse.report_freshness_days",
+              "source": "github_repo",
+              "collector": "tools/scorecard-run/collectors/lighthouse_freshness.ts",
+              "input": 1,
+              "score": 5,
+              "captured_at": "2026-04-27",
+              "evidence_paths": [
+                "benchmarks/tooling.md"
+              ]
+            }
+          ]
+        },
+        "tooling:release-bot": {
+          "leaf_tag": "tooling:release-bot",
+          "name": "release-bot",
+          "aggregation": "weighted",
+          "score": 4,
+          "signals": [
+            {
+              "signal_id": "tooling.release_bot.publish_success_rate_90d",
+              "source": "github_repo",
+              "collector": "tools/scorecard-run/collectors/release_bot_publish.ts",
+              "input": 1,
+              "score": 5,
+              "captured_at": "2026-04-27",
+              "evidence_paths": [
+                "benchmarks/tooling.md"
+              ]
+            },
+            {
+              "signal_id": "tooling.release_bot.changelog_pr_success_rate_90d",
+              "source": "github_repo",
+              "collector": "tools/scorecard-run/collectors/release_bot_pr.ts",
+              "input": 1,
+              "score": 5,
+              "captured_at": "2026-04-27",
+              "evidence_paths": [
+                "benchmarks/tooling.md"
+              ]
+            },
+            {
+              "signal_id": "tooling.release_bot.manual_intervention_rate_90d",
+              "source": "github_repo",
+              "collector": "tools/scorecard-run/collectors/release_bot_manual.ts",
+              "input": 1,
+              "score": 0,
+              "captured_at": "2026-04-27",
+              "evidence_paths": [
+                "benchmarks/tooling.md"
+              ]
+            }
+          ]
+        },
+        "tooling:metrics-fetch": {
+          "leaf_tag": "tooling:metrics-fetch",
+          "name": "metrics-fetch",
+          "aggregation": "weighted",
+          "score": 5,
+          "signals": [
+            {
+              "signal_id": "tooling.metrics_fetch.success_rate_7d",
+              "source": "github_repo",
+              "collector": "tools/scorecard-run/collectors/metrics_fetch_success.ts",
+              "input": 1,
+              "score": 5,
+              "captured_at": "2026-04-27",
+              "evidence_paths": [
+                "benchmarks/tooling.md"
+              ]
+            },
+            {
+              "signal_id": "tooling.metrics_fetch.required_snapshot_max_age_days",
+              "source": "github_repo",
+              "collector": "tools/scorecard-run/collectors/metrics_fetch_age.ts",
+              "input": 1,
+              "score": 5,
+              "captured_at": "2026-04-27",
+              "evidence_paths": [
+                "benchmarks/tooling.md"
+              ]
+            },
+            {
+              "signal_id": "tooling.metrics_fetch.schema_compliance_rate",
+              "source": "github_repo",
+              "collector": "tools/scorecard-run/collectors/metrics_fetch_schema.ts",
+              "input": 1,
+              "score": 5,
+              "captured_at": "2026-04-27",
+              "evidence_paths": [
+                "benchmarks/tooling.md"
+              ]
+            }
+          ]
+        },
+        "tooling:fm-indexer": {
+          "leaf_tag": "tooling:fm-indexer",
+          "name": "fm-indexer",
+          "aggregation": "weighted",
+          "score": 3.8,
+          "signals": [
+            {
+              "signal_id": "tooling.fm_indexer.runtime_seconds",
+              "source": "github_repo",
+              "collector": "tools/scorecard-run/collectors/fm_indexer_runtime.ts",
+              "input": 1,
+              "score": 5,
+              "captured_at": "2026-04-27",
+              "evidence_paths": [
+                "benchmarks/tooling.md"
+              ]
+            },
+            {
+              "signal_id": "tooling.fm_indexer.negative_fixture_detection_rate",
+              "source": "github_repo",
+              "collector": "tools/scorecard-run/collectors/fm_indexer_negative.ts",
+              "input": 1,
+              "score": 5,
+              "captured_at": "2026-04-27",
+              "evidence_paths": [
+                "benchmarks/tooling.md"
+              ]
+            },
+            {
+              "signal_id": "tooling.fm_indexer.verbose_flag_visibility",
+              "source": "github_repo",
+              "collector": "tools/scorecard-run/collectors/fm_indexer_verbose.ts",
+              "input": 1,
+              "score": 1,
+              "captured_at": "2026-04-27",
+              "evidence_paths": [
+                "benchmarks/tooling.md"
+              ]
+            }
+          ]
+        }
+      },
+      "evidence_paths": [
+        "benchmarks/tooling.md"
+      ]
+    }
+  },
+  "failures": []
+}

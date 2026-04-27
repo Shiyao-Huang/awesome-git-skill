@@ -1,0 +1,12 @@
+{
+  "name": "@opensource-optimizer/collectors",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "tsc -p tsconfig.json --noEmit && node --test --experimental-strip-types src/*.test.ts",
+    "repo": "node --experimental-strip-types src/cli.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

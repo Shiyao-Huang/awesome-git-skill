@@ -1,0 +1,14 @@
+{
+  "name": "opensource-star-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "tsc -p tsconfig.json --noEmit && node --test index.test.ts"
+  },
+  "dependencies": {
+    "yaml": "^2.8.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
