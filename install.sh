@@ -14,13 +14,15 @@ BASE_URL="${OSS_SCORECARD_BASE_URL:-https://oss-scorecard.dev}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 REPO_ROOT="${OSS_SCORECARD_REPO_ROOT:-$SCRIPT_DIR}"
 SOURCE_SKILL_DIR="${REPO_ROOT}/skills/oss-scorecard"
-LOCAL_BIN_ENTRY="${REPO_ROOT}/bin/oss-scorecard.mjs"
+SOURCE_BIN_PATH="${REPO_ROOT}/bin/oss-scorecard.mjs"
 
 INSTALL_HOME="${OSS_SCORECARD_HOME:-${HOME}/.oss-scorecard}"
 STAGE_DIR="${INSTALL_HOME}/skills/oss-scorecard"
-BIN_HOME="${OSS_SCORECARD_BIN_HOME:-${HOME}/.local/bin}"
-WRAPPER_PATH="${BIN_HOME}/oss-scorecard"
+BIN_DIR="${OSS_SCORECARD_BIN_DIR:-${HOME}/.local/bin}"
+BIN_SHIM_PATH="${BIN_DIR}/oss-scorecard"
 LINK_TARGETS_RAW="${OSS_SCORECARD_LINK_TARGETS:-}"
+REMOTE_BIN_SUPPORTED="0"
+LOCAL_BIN_INSTALLED="0"
 
 SKILL_FILES=(
   "SKILL.md"
@@ -29,8 +31,6 @@ SKILL_FILES=(
   "agents/openai.yaml"
   "references/asset-map.md"
 )
-
-REMOTE_CLI_SUPPORTED=0
 
 stage_local_bundle() {
   note "using local repo skill sources from ${SOURCE_SKILL_DIR}"
@@ -54,22 +54,23 @@ download_remote_bundle() {
   done
 }
 
-install_local_wrapper() {
-  command -v node >/dev/null 2>&1 || fail "node is required to install the local CLI wrapper"
-  [[ -f "$LOCAL_BIN_ENTRY" ]] || fail "missing local CLI entrypoint: ${LOCAL_BIN_ENTRY}"
-  mkdir -p "$BIN_HOME"
-  cat > "$WRAPPER_PATH" <<WRAPPER
+install_local_bin_shim() {
+  [[ -f "$SOURCE_BIN_PATH" ]] || return 0
+
+  mkdir -p "$BIN_DIR"
+  cat > "$BIN_SHIM_PATH" <<SHIM
 #!/usr/bin/env bash
 set -euo pipefail
-exec node "${LOCAL_BIN_ENTRY}" "\$@"
-WRAPPER
-  chmod +x "$WRAPPER_PATH"
-  note "installed CLI wrapper -> ${WRAPPER_PATH}"
+exec node "$SOURCE_BIN_PATH" "\$@"
+SHIM
+  chmod +x "$BIN_SHIM_PATH"
+  LOCAL_BIN_INSTALLED="1"
+  note "installed local CLI shim -> ${BIN_SHIM_PATH}"
 }
 
 if [[ -d "$SOURCE_SKILL_DIR" ]]; then
   stage_local_bundle
-  install_local_wrapper
+  install_local_bin_shim
 else
   download_remote_bundle
 fi
@@ -81,10 +82,6 @@ else
   [[ -d "${HOME}/.claude" ]] && TARGETS+=("claude")
   [[ -d "${HOME}/.codex" ]] && TARGETS+=("codex")
   [[ -d "${HOME}/.cursor" ]] && TARGETS+=("cursor")
-fi
-
-if [[ "${#TARGETS[@]}" -eq 0 ]]; then
-  fail "no supported client homes detected under ~/.claude, ~/.codex, or ~/.cursor. Create one first or set OSS_SCORECARD_LINK_TARGETS=claude,codex,cursor explicitly."
 fi
 
 link_into_claude() {
@@ -126,40 +123,47 @@ link_into_cursor() {
   note "linked Cursor rule -> ${link_path}"
 }
 
-for target in "${TARGETS[@]}"; do
-  case "$target" in
-    claude)
-      link_into_claude
-      ;;
-    codex)
-      link_into_codex
-      ;;
-    cursor)
-      link_into_cursor
-      ;;
-    *)
-      fail "unknown install target: ${target}"
-      ;;
-  esac
-done
+if [[ "${#TARGETS[@]}" -eq 0 ]]; then
+  note "no ~/.claude, ~/.codex, or ~/.cursor home detected; staged skill bundle without agent links"
+else
+  for target in "${TARGETS[@]}"; do
+    case "$target" in
+      claude)
+        link_into_claude
+        ;;
+      codex)
+        link_into_codex
+        ;;
+      cursor)
+        link_into_cursor
+        ;;
+      *)
+        fail "unknown install target: ${target}"
+        ;;
+    esac
+  done
+fi
 
 note "staged skill files in ${STAGE_DIR}"
 printf '\n'
 printf 'Next steps:\n'
-if [[ -x "$WRAPPER_PATH" ]]; then
-  printf '  1. Run: %s help\n' "$WRAPPER_PATH"
-  printf '  2. Audit a repo: %s audit openclaw/openclaw\n' "$WRAPPER_PATH"
-  if [[ ":$PATH:" != *":$BIN_HOME:"* ]]; then
-    printf '  3. Add %s to PATH to call `oss-scorecard` directly\n' "$BIN_HOME"
-    printf '     export PATH="%s:$PATH"\n' "$BIN_HOME"
-    printf '  4. If GitHub auth is missing, run: gh auth login\n'
-    printf '  5. Public install target (once hosted): curl -sfL %s/install.sh | bash\n' "$BASE_URL"
-  else
-    printf '  3. If GitHub auth is missing, run: gh auth login\n'
-    printf '  4. Public install target (once hosted): curl -sfL %s/install.sh | bash\n' "$BASE_URL"
-  fi
+if [[ "$LOCAL_BIN_INSTALLED" == "1" ]]; then
+  printf '  1. Run: oss-scorecard --help\n'
+  printf '  2. Audit a repo: oss-scorecard audit openclaw/openclaw\n'
 else
-  printf '  1. Skill bundle installed for Claude/Codex/Cursor\n'
-  printf '  2. Public CLI wrapper is not bundled in remote mode yet; use the skill inside your agent client\n'
-  printf '  3. Once hosted, public install target will stay: curl -sfL %s/install.sh | bash\n' "$BASE_URL"
+  printf '  1. Skill staged locally; CLI shim was not installed in this mode\n'
+  printf '  2. If you have a repo checkout, run: bash ./install.sh from that checkout for a local CLI shim\n'
+fi
+printf '  3. If GitHub auth is missing, run: gh auth login\n'
+printf '  4. Public install target (once hosted): curl -sfL %s/install.sh | bash\n' "$BASE_URL"
+
+if [[ "$LOCAL_BIN_INSTALLED" == "1" ]]; then
+  case ":${PATH}:" in
+    *":${BIN_DIR}:"*) ;;
+    *)
+      printf '\n'
+      printf 'Path note:\n'
+      printf '  Add %s to PATH if `oss-scorecard` is not found.\n' "$BIN_DIR"
+      ;;
+  esac
 fi

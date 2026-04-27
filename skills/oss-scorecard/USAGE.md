@@ -38,8 +38,10 @@ curl -sfL https://oss-scorecard.dev/install.sh | bash
 
 ```bash
 ./install.sh
-oss-scorecard audit openclaw/openclaw
+~/.local/bin/oss-scorecard audit openclaw/openclaw
 ```
+
+如果你的 `PATH` 已包含 `~/.local/bin`，也可以直接用 `oss-scorecard audit openclaw/openclaw`。
 
 如果你不想先安装 skill，也可以直接：
 

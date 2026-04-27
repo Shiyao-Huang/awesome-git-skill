@@ -50,6 +50,8 @@ node ./bin/oss-scorecard.mjs audit openclaw/openclaw
 
 ## 0. 运行前提
 
+当前本地 install 会自动安装 CLI wrapper 到 `~/.local/bin/oss-scorecard`。
+
 当前 bootstrap 版本依赖本机 `gh` 登录态：
 
 ```bash

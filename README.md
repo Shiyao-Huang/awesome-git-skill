@@ -3,32 +3,42 @@
 > Score real GitHub repos across 6 growth domains, using rules grounded in breakout open-source case studies.
 
 ```bash
-# target public install (CDN / skill-first distribution)
-curl -sfL https://oss-scorecard.dev/install.sh | bash
-
-# current local bootstrap from a repo checkout
-bash ./install.sh
-```
-
-Paste-and-go is the intended install UX: skill first, zero-config, local-first.
-
-## Hero
-
-目标分发体验：
-
-```bash
 curl -sfL https://oss-scorecard.dev/install.sh | bash
 ```
-
-安装后直接：
 
 ```bash
 oss-scorecard audit openclaw/openclaw
 ```
 
-> 当前本地 `./install.sh` 会在 repo checkout 场景下写入 `~/.local/bin/oss-scorecard` shim；公网 `install.sh` 上线后会对齐到同样的即装即用体验。
+```bash
+openclaw/openclaw  (https://github.com/openclaw/openclaw)
+captured_at: 2026-04-27T07:49:31.142Z
+mode: bootstrap-v0  version: 0.1.0-bootstrap
 
-`oss-scorecard` 是这个仓库的**公开产品名**。
+facade:     5.0/5   ██████████
+docs:       5.0/5   ██████████
+community:  5.0/5   ██████████
+quality:    5.0/5   ██████████
+caselib:    4.0/5   ████████░░
+tooling:    5.0/5   ██████████
+TOTAL:      4.8/5   ██████████
+```
+
+Paste-and-go is the intended install UX: skill-first, zero-config, local-first.  
+当前如果你是从 repo checkout 试用，也可以直接：
+
+```bash
+bash ./install.sh
+```
+
+## Hero
+
+`oss-scorecard` 是这个仓库的**公开产品名**。首屏承诺只有两件事：
+
+1. **一行安装**：`curl -sfL https://oss-scorecard.dev/install.sh | bash`
+2. **零配置审计**：`oss-scorecard audit owner/repo`
+
+> 当前本地 `./install.sh` 会在 repo checkout 场景下写入 `~/.local/bin/oss-scorecard` shim；公网 `install.sh` 上线后会对齐到同样的即装即用体验。
 
 - **对外产品 / 仓库名**：`oss-scorecard`
 - **内部执行团队模板 / Legion 名**：`opensource-optimizer`
@@ -59,6 +69,19 @@ oss-scorecard audit openclaw/openclaw
 - `skills/oss-scorecard/references/asset-map.md` — benchmark / playbook / case-study 映射
 
 Skill-first，CLI/core 作为底层引擎继续演进；Legion + Agents 作为 genome-hub 组织资产层继续保留。
+
+
+## 研究如何变成可用资产
+
+这个仓库不是把研究结果原样堆出来，而是把研究分解成 5 类可复用资产：
+
+1. **Case studies → 数据样本**：`case-studies/` + `research/` + `benchmarks/case-anchors.yaml`
+2. **Benchmarks → 评分规则**：`benchmarks/` + `packages/core/src/bootstrap-rules.ts`
+3. **Playbooks → 改进动作库**：`playbooks/`（包括 `playbooks/quick-wins.md`）
+4. **Tools / Core / CLI → 可执行产品**：`packages/core/`、`packages/cli/`、`bin/oss-scorecard.mjs`
+5. **History / Legion / Agents → 可分享 provenance**：`history/` + `skills/` + 已发布 `opensource-optimizer` Legion
+
+也就是说：**研究本身已经被产品化成一个开源项目**。今天它不只是结论文档，而是一个能安装、能审计真实仓库、能给出改进建议的 `oss-scorecard`。
 
 ## 当前真实能力
 
