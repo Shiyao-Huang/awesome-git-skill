@@ -1,7 +1,12 @@
-# oss-scorecard — Architecture
+# awesome-git-skill — Architecture
 
 > Status: v0.1 (bootstrap). Captured 2026-04-27. Owned by architect role.
 > Companion docs: [methodology.md](./methodology.md) (rubric), [changelog.md](./changelog.md) (history).
+>
+> **Naming convention**:
+> - **Public repo / brand**: `awesome-git-skill` (https://github.com/Shiyao-Huang/awesome-git-skill)
+> - **CLI command**: `oss-scorecard` (binary entry: `bin/oss-scorecard.mjs`)
+> - **Internal team / Legion**: `opensource-optimizer` (genome-hub CorpsID: `cmogou8fn000u1403dndkdicg`)
 
 ## 0. Design Principles (Product DNA)
 
