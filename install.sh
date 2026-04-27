@@ -10,11 +10,21 @@ note() {
   printf 'oss-scorecard install: %s\n' "$1"
 }
 
-BASE_URL="${OSS_SCORECARD_BASE_URL:-https://oss-scorecard.dev}"
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+BASE_URL="${OSS_SCORECARD_BASE_URL:-https://raw.githubusercontent.com/Shiyao-Huang/awesome-git-skill/main}"
+SCRIPT_SOURCE="${BASH_SOURCE[0]-}"
+if [[ -n "$SCRIPT_SOURCE" && "$SCRIPT_SOURCE" != "bash" && -e "$SCRIPT_SOURCE" ]]; then
+  SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" >/dev/null 2>&1 && pwd)"
+else
+  SCRIPT_DIR=""
+fi
 REPO_ROOT="${OSS_SCORECARD_REPO_ROOT:-$SCRIPT_DIR}"
-SOURCE_SKILL_DIR="${REPO_ROOT}/skills/oss-scorecard"
-SOURCE_BIN_PATH="${REPO_ROOT}/bin/oss-scorecard.mjs"
+if [[ -n "$REPO_ROOT" ]]; then
+  SOURCE_SKILL_DIR="${REPO_ROOT}/skills/oss-scorecard"
+  SOURCE_BIN_PATH="${REPO_ROOT}/bin/oss-scorecard.mjs"
+else
+  SOURCE_SKILL_DIR=""
+  SOURCE_BIN_PATH=""
+fi
 
 INSTALL_HOME="${OSS_SCORECARD_HOME:-${HOME}/.oss-scorecard}"
 STAGE_DIR="${INSTALL_HOME}/skills/oss-scorecard"
@@ -30,6 +40,9 @@ SKILL_FILES=(
   "USAGE.md"
   "agents/openai.yaml"
   "references/asset-map.md"
+  "references/deep-analysis-dimensions.md"
+  "references/knowledge-to-guidance.md"
+  "references/project-profile.md"
 )
 
 stage_local_bundle() {
@@ -155,7 +168,7 @@ else
   printf '  2. If you have a repo checkout, run: bash ./install.sh from that checkout for a local CLI shim\n'
 fi
 printf '  3. If GitHub auth is missing, run: gh auth login\n'
-printf '  4. Public install target (once hosted): curl -sfL %s/install.sh | bash\n' "$BASE_URL"
+printf '  4. Public install: curl -sfL https://raw.githubusercontent.com/Shiyao-Huang/awesome-git-skill/main/install.sh | bash\n'
 
 if [[ "$LOCAL_BIN_INSTALLED" == "1" ]]; then
   case ":${PATH}:" in
