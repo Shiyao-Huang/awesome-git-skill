@@ -8,6 +8,7 @@ const report: ScoreReport = {
   project: 'acme/rocket',
   repoUrl: 'https://github.com/acme/rocket',
   capturedAt: '2026-04-27T12:00:00.000Z',
+  targetRef: 'main',
   version: '0.1.0-bootstrap',
   mode: 'bootstrap-v0',
   overall: {

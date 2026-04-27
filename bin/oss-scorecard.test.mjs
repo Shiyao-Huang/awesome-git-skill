@@ -38,13 +38,13 @@ test('audit --help delegates to packages/cli implementation', () => {
   const result = runCli(['audit', '--help']);
   assert.equal(result.status, 0);
   assert.match(result.stdout, /Bootstrap OSS scorecard/i);
-  assert.match(result.stdout, /--repo <owner\/repo>/i);
+  assert.match(result.stdout, /--repo <owner\/repo\[@ref\]>/i);
 });
 
 test('score --help documents repo mode and legacy mode', () => {
   const result = runCli(['score', '--help']);
   assert.equal(result.status, 0);
-  assert.match(result.stdout, /oss-scorecard score <owner\/repo>/i);
+  assert.match(result.stdout, /oss-scorecard score <owner\/repo\[@ref\]>/i);
   assert.match(result.stdout, /--legacy --config/i);
 });
 

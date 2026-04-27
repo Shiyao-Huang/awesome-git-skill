@@ -3,6 +3,7 @@ export type Domain = 'facade' | 'docs' | 'community' | 'quality' | 'caselib' | '
 export type GitHubRepoTarget = {
   owner: string;
   repo: string;
+  ref?: string;
 };
 
 export type RepoSnapshot = {
@@ -10,6 +11,7 @@ export type RepoSnapshot = {
   repoUrl: string;
   repoFullName: string;
   defaultBranch: string;
+  targetRef: string;
   stars: number;
   forks: number;
   openIssues: number;
@@ -89,6 +91,7 @@ export type ScoreReport = {
   project: string;
   repoUrl: string;
   capturedAt: string;
+  targetRef: string;
   version: string;
   mode: 'bootstrap-v0';
   overall: {

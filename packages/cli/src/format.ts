@@ -15,6 +15,7 @@ export function renderTerminalReport(report: ScoreReport): string {
   const lines = [
     `${report.project}  (${report.repoUrl})`,
     `captured_at: ${report.capturedAt}`,
+    `ref: ${report.targetRef}`,
     `mode: ${report.mode}  version: ${report.version}`,
     '',
     ...report.domains.map(formatDomain),
@@ -51,6 +52,7 @@ export function renderMarkdownReport(report: ScoreReport): string {
     '',
     `- Repo: ${report.repoUrl}`,
     `- Captured at: ${report.capturedAt}`,
+    `- Ref: ${report.targetRef}`,
     `- Mode: ${report.mode}`,
     `- Overall: ${report.overall.normalizedFiveScale.toFixed(1)}/5 (${report.overall.normalizedScore.toFixed(1)}/100)`,
     '',

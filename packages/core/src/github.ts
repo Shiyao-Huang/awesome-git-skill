@@ -124,13 +124,19 @@ export function buildGitHubAuthHint(): string {
   ].join(' ');
 }
 
+function appendRefQuery(path: string, ref?: string): string {
+  if (!ref) return path;
+  const separator = path.includes('?') ? '&' : '?';
+  return `${path}${separator}ref=${encodeURIComponent(ref)}`;
+}
+
 async function githubJson<T>(path: string): Promise<T> {
   const stdout = await ghApi([path]);
   return JSON.parse(stdout) as T;
 }
 
-async function githubText(path: string): Promise<string> {
-  return await ghApi(['-H', 'Accept: application/vnd.github.raw+json', path]);
+async function githubText(path: string, ref?: string): Promise<string> {
+  return await ghApi(['-H', 'Accept: application/vnd.github.raw+json', appendRefQuery(path, ref)]);
 }
 
 async function ghApiWithHeaders(path: string): Promise<{ headers: string; body: string }> {
@@ -150,6 +156,7 @@ async function fetchOptionalFileText(
   owner: string,
   repo: string,
   filePath: string | null,
+  ref: string,
 ): Promise<{
   path: string | null;
   text: string | null;
@@ -159,7 +166,7 @@ async function fetchOptionalFileText(
   }
   let text: string | null = null;
   try {
-    text = await githubText(`/repos/${owner}/${repo}/contents/${filePath}`);
+    text = await githubText(`/repos/${owner}/${repo}/contents/${filePath}`, ref);
   } catch {
     text = null;
   }
@@ -192,7 +199,9 @@ async function fetchReleasesCount(owner: string, repo: string): Promise<number> 
 export function parseRepoTarget(input: string): GitHubRepoTarget {
   const normalized = input.trim();
   if (!normalized) {
-    throw new Error('repo is required (expected owner/repo or https://github.com/owner/repo)');
+    throw new Error(
+      'repo is required (expected owner/repo, owner/repo@ref, https://github.com/owner/repo, or https://github.com/owner/repo/tree/ref)',
+    );
   }
 
   const withoutUrl = normalized
@@ -201,14 +210,24 @@ export function parseRepoTarget(input: string): GitHubRepoTarget {
     .replace(/\.git$/i, '')
     .replace(/\/+$/, '');
 
-  const parts = withoutUrl.split('/').filter(Boolean);
-  if (parts.length !== 2) {
-    throw new Error(`invalid repo target: ${input} (expected owner/repo)`);
+  const treeMatch = withoutUrl.match(/^([^/]+)\/([^/]+)\/tree\/(.+)$/);
+  if (treeMatch) {
+    return {
+      owner: treeMatch[1],
+      repo: treeMatch[2],
+      ref: treeMatch[3],
+    };
+  }
+
+  const refMatch = withoutUrl.match(/^([^/]+)\/([^/@]+)(?:@(.+))?$/);
+  if (!refMatch) {
+    throw new Error(`invalid repo target: ${input} (expected owner/repo or owner/repo@ref)`);
   }
 
   return {
-    owner: parts[0],
-    repo: parts[1],
+    owner: refMatch[1],
+    repo: refMatch[2],
+    ref: refMatch[3] || undefined,
   };
 }
 
@@ -219,8 +238,9 @@ export async function collectRepoSnapshot(target: GitHubRepoTarget): Promise<Rep
     fetchReleasesCount(target.owner, target.repo),
   ]);
 
+  const targetRef = target.ref ?? repo.default_branch;
   const tree = await githubJson<TreeApiResponse>(
-    `/repos/${target.owner}/${target.repo}/git/trees/${encodeURIComponent(repo.default_branch)}?recursive=1`,
+    `/repos/${target.owner}/${target.repo}/git/trees/${encodeURIComponent(targetRef)}?recursive=1`,
   );
 
   const paths = tree.tree.map((entry) => entry.path);
@@ -247,18 +267,26 @@ export async function collectRepoSnapshot(target: GitHubRepoTarget): Promise<Rep
   const findPath = (patterns: RegExp[]): string | null =>
     paths.find((path) => patterns.some((pattern) => pattern.test(path))) ?? null;
 
-  const readme = await fetchOptionalFileText(target.owner, target.repo, findPath([/^README/i, /^readme/i]));
-  const contributing = await fetchOptionalFileText(target.owner, target.repo, findPath([/^CONTRIBUTING/i, /^contributing/i]));
-  const securityRoot = await fetchOptionalFileText(target.owner, target.repo, findPath([/^SECURITY/i, /^security/i]));
+  const readme = await fetchOptionalFileText(target.owner, target.repo, findPath([/^README/i, /^readme/i]), targetRef);
+  const contributing = await fetchOptionalFileText(
+    target.owner,
+    target.repo,
+    findPath([/^CONTRIBUTING/i, /^contributing/i]),
+    targetRef,
+  );
+  const securityRoot = await fetchOptionalFileText(target.owner, target.repo, findPath([/^SECURITY/i, /^security/i]), targetRef);
   const securityGithub = securityRoot.text
     ? securityRoot
-    : await fetchOptionalFileText(target.owner, target.repo, findPath([/^\.github\/SECURITY/i]));
-  const packageJson = await fetchOptionalFileText(target.owner, target.repo, findPath([/^package\.json$/i]));
+    : await fetchOptionalFileText(target.owner, target.repo, findPath([/^\.github\/SECURITY/i]), targetRef);
+  const packageJson = await fetchOptionalFileText(target.owner, target.repo, findPath([/^package\.json$/i]), targetRef);
 
   const workflowTextEntries = await Promise.all(
     workflowFiles.map(async (path) => {
         try {
-          return [path, await githubText(`/repos/${target.owner}/${target.repo}/contents/${path}`)] as const;
+          return [
+            path,
+            await githubText(`/repos/${target.owner}/${target.repo}/contents/${path}`, targetRef),
+          ] as const;
         } catch {
           return [path, null] as const;
         }
@@ -273,9 +301,10 @@ export async function collectRepoSnapshot(target: GitHubRepoTarget): Promise<Rep
 
   return {
     capturedAt: new Date().toISOString(),
-    repoUrl: repo.html_url,
+    repoUrl: target.ref ? `${repo.html_url}/tree/${target.ref}` : repo.html_url,
     repoFullName: repo.full_name,
     defaultBranch: repo.default_branch,
+    targetRef,
     stars: repo.stargazers_count,
     forks: repo.forks_count,
     openIssues: repo.open_issues_count,

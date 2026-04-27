@@ -1,4 +1,4 @@
-# oss-scorecard
+# awesome-git-skill
 
 > Score real GitHub repos across 6 growth domains, using rules grounded in breakout open-source case studies.
 
@@ -33,20 +33,22 @@ bash ./install.sh
 
 ## Hero
 
-`oss-scorecard` 是这个仓库的**公开产品名**。首屏承诺只有两件事：
+`awesome-git-skill` 是这个仓库的**公开仓库名 / 品牌名**，`oss-scorecard` 是当前 CLI 命令名。首屏承诺只有两件事：
 
 1. **一行安装**：`curl -sfL https://oss-scorecard.dev/install.sh | bash`
-2. **零配置审计**：`oss-scorecard audit owner/repo`
+2. **零配置审计**：`oss-scorecard audit owner/repo`（也支持 `owner/repo@branch`）
 
 > 当前本地 `./install.sh` 会在 repo checkout 场景下写入 `~/.local/bin/oss-scorecard` shim；公网 `install.sh` 上线后会对齐到同样的即装即用体验。
 
-- **对外产品 / 仓库名**：`oss-scorecard`
+- **对外仓库 / 品牌名**：`awesome-git-skill`
+- **CLI 命令名**：`oss-scorecard`
 - **内部执行团队模板 / Legion 名**：`opensource-optimizer`
 - **已发布 CorpsID**：`cmogou8fn000u1403dndkdicg`
 
 这样命名的原因很简单：
 
-- `oss-scorecard` 直接表达首个可传播、可执行、可安装的产品入口
+- `awesome-git-skill` 负责 GitHub 传播与品牌记忆
+- `oss-scorecard` 继续作为可执行 CLI / skill 命令名
 - `opensource-optimizer` 继续作为 multi-agent 执行团队的名称存在于 genome-hub
 
 ## 这个仓库现在是什么
@@ -135,7 +137,7 @@ npm --prefix tools test
 
 ## 下一步默认方向
 
-1. 继续增强真实 GitHub repo 的 `score` 路径（更多 signals / richer evidence / compare）
+1. 继续增强真实 GitHub repo / branch 的 `score` 路径（更多 signals / richer evidence / compare）
 2. 把 benchmark / playbook 规则继续机器可执行化
 3. 给 CLI 增加可分享输出（badge / markdown report / compare）
 4. 继续扩 Tier-2 样本，但不让文档工作抢主线功能

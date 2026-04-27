@@ -1,9 +1,11 @@
 #!/usr/bin/env node
+import { existsSync } from 'node:fs';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import process from 'node:process';
 
 import { collectRepoSnapshot, parseRepoTarget } from '../../core/src/github.ts';
+import { collectLocalRepoSnapshot } from '../../core/src/local.ts';
 import { scoreRepoSnapshot } from '../../core/src/score.ts';
 import { renderMarkdownReport, renderTerminalReport } from './format.ts';
 
@@ -56,9 +58,11 @@ function parseArgs(argv: string[]): CliOptions {
     if (arg === '--help' || arg === '-h') {
       process.stdout.write(
         [
-          'Usage: node --experimental-strip-types packages/cli/src/index.ts --repo <owner/repo> [--format terminal|json|markdown] [--json-out <path>] [--markdown-out <path>]',
+          'Usage: node --experimental-strip-types packages/cli/src/index.ts --repo <owner/repo[@ref]|/local/path> [--format terminal|json|markdown] [--json-out <path>] [--markdown-out <path>]',
           '',
-          'Bootstrap OSS scorecard: fetches a GitHub repo snapshot, computes 6-domain heuristic scores, and prints actionable output.',
+          'Bootstrap OSS scorecard: fetches a GitHub repo snapshot or scans a local git worktree, computes 6-domain heuristic scores, and prints actionable output.',
+          'Branch/ref syntax: owner/repo@branch or https://github.com/owner/repo/tree/branch',
+          'Local path mode: point at a checked-out git worktree to audit private/unpublished code directly.',
           'Optional env: GITHUB_TOKEN or GH_TOKEN for higher API limits.',
         ].join('\n') + '\n',
       );
@@ -81,8 +85,9 @@ function writeText(path: string, text: string): void {
 
 async function main(): Promise<void> {
   const options = parseArgs(process.argv.slice(2));
-  const target = parseRepoTarget(options.repo);
-  const snapshot = await collectRepoSnapshot(target);
+  const snapshot = existsSync(resolve(process.cwd(), options.repo))
+    ? await collectLocalRepoSnapshot(resolve(process.cwd(), options.repo))
+    : await collectRepoSnapshot(parseRepoTarget(options.repo));
   const report = scoreRepoSnapshot(snapshot);
   const jsonText = JSON.stringify(report, null, 2);
   const markdownText = renderMarkdownReport(report);

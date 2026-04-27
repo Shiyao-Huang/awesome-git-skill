@@ -10,6 +10,7 @@ function makeSnapshot(overrides: Partial<RepoSnapshot> = {}): RepoSnapshot {
     repoUrl: 'https://github.com/acme/rocket',
     repoFullName: 'acme/rocket',
     defaultBranch: 'main',
+    targetRef: 'main',
     stars: 42000,
     forks: 1200,
     openIssues: 23,

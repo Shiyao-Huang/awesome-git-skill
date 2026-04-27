@@ -64,9 +64,13 @@ export function scoreRepoSnapshot(snapshot: RepoSnapshot): ScoreReport {
     .map(({ rank: _rank, ...item }) => item);
 
   return {
-    project: snapshot.repoFullName,
+    project:
+      snapshot.targetRef && snapshot.targetRef !== snapshot.defaultBranch
+        ? `${snapshot.repoFullName}@${snapshot.targetRef}`
+        : snapshot.repoFullName,
     repoUrl: snapshot.repoUrl,
     capturedAt: snapshot.capturedAt,
+    targetRef: snapshot.targetRef,
     version: VERSION,
     mode: 'bootstrap-v0',
     overall: {

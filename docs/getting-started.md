@@ -1,6 +1,6 @@
 # Getting Started
 
-> 目标：让第一次接触 `oss-scorecard` 的人，在 **1 分钟内** 跑出一个真实 GitHub repo 的六域评分结果。
+> 公开仓库名是 `awesome-git-skill`，当前可执行命令名是 `oss-scorecard`。目标：让第一次接触它的人，在 **1 分钟内** 跑出一个真实 GitHub repo 的六域评分结果。
 
 ## Hero：安装体验目标
 
@@ -36,7 +36,7 @@ node ./bin/oss-scorecard.mjs audit openclaw/openclaw
 
 ## 你会得到什么
 
-输入一个 GitHub 仓库：
+输入一个 GitHub 仓库（也支持 branch 形态 `owner/repo@branch`）：
 
 ```bash
 node ./bin/oss-scorecard.mjs audit openclaw/openclaw
@@ -81,6 +81,12 @@ node ./bin/oss-scorecard.mjs --help
 
 ```bash
 node ./bin/oss-scorecard.mjs audit openclaw/openclaw
+```
+
+### 指定分支
+
+```bash
+node ./bin/oss-scorecard.mjs audit Shiyao-Huang/bach-orchestra@remerge/online-v5-packages
 ```
 
 ### 终端输出示例

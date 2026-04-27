@@ -1,6 +1,6 @@
 # OSS Scorecard Skill Usage
 
-> 给想通过 **skill 入口** 使用 `oss-scorecard` 的人看的最短说明。
+> 仓库品牌名 `awesome-git-skill`，skill / CLI 命令名 `oss-scorecard`。给想通过 **skill 入口** 使用它的人看的最短说明。
 
 ## Hero：我们要的安装/分发体验
 
@@ -83,7 +83,8 @@ node ./bin/oss-scorecard.mjs audit openclaw/openclaw
 接受：
 
 - `owner/repo`
-- 完整 GitHub URL
+- `owner/repo@branch`
+- 完整 GitHub URL（含 `/tree/<branch>` 也可）
 
 都先转成：
 
